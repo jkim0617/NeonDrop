@@ -49,6 +49,27 @@ struct LevelData
     std::vector<LaserEvent> laserEvents;
 };
 
+bool circleIntersectsLaser(const sf::CircleShape& player, float radius, const Laser& laser)
+{
+    if (!laser.active)
+        return false;
+
+    // Convert player center from world space into laser's local space
+    sf::Vector2f localCenter =
+        laser.shape.getTransform().getInverse().transformPoint(player.getPosition());
+
+    sf::Vector2f laserSize = laser.shape.getSize();
+
+    // Closest point on the laser rectangle to the player's center
+    float closestX = std::clamp(localCenter.x, 0.0f, laserSize.x);
+    float closestY = std::clamp(localCenter.y, 0.0f, laserSize.y);
+
+    float dx = localCenter.x - closestX;
+    float dy = localCenter.y - closestY;
+
+    return (dx * dx + dy * dy) <= (radius * radius);
+}
+
 LevelData loadLevel(const std::string &filename)
 {
     LevelData level;
@@ -117,6 +138,14 @@ int main()
     player.setOrigin({playerRadius, playerRadius});
     player.setPosition({windowWidth / 2.0f, windowHeight / 2.0f});
     player.setFillColor(sf::Color::Red);
+    
+    const int maxHealth = 20;
+    int playerHealth = maxHealth;
+
+    bool gameOver = false;
+
+    float damageCooldown = 0.0f;
+    const float damageCooldownDuration = 0.75f;
 
     // Beat / strobe system
     LevelData level = loadLevel("levels/laserbeam.txt");
@@ -124,10 +153,23 @@ int main()
     float mapBPM = level.bpm;
     float beatInterval = 60.0f / mapBPM;
 
+    // Debug start point
+    float debugStartBeat = 00.0f; // Change this to any beat you want
+    float debugStartTime = debugStartBeat * beatInterval;
+
     std::vector<LaserEvent> laserEvents = level.laserEvents;
     std::vector<Laser> lasers;
 
-    float songTime = 0.0f;
+    for (auto& event : laserEvents)
+    {
+        if (event.activeBeat < debugStartBeat)
+        {
+            event.spawned = true;
+        }
+    }
+
+    // float songTime = 0.0f;
+    float songTime = debugStartTime;
     int lastBeatIndex = -1;
     float beatPulse = 0.0f;
 
@@ -171,6 +213,9 @@ int main()
 
     music.setVolume(10.0f);  // 0 to 100
     music.setLooping(false); // true if you want it to repeat
+
+    music.setPlayingOffset(sf::seconds(debugStartTime));   
+
     music.play();
 
     sf::Font debugFont;
@@ -186,14 +231,67 @@ int main()
     debugText.setFillColor(sf::Color::White);
     debugText.setPosition({20.0f, 20.0f});
 
+    sf::Text gameOverText(debugFont);
+    gameOverText.setCharacterSize(64);
+    gameOverText.setFillColor(sf::Color::White);
+    gameOverText.setString("GAME OVER");
+
+    sf::FloatRect gameOverBounds = gameOverText.getLocalBounds();
+    gameOverText.setOrigin({
+        gameOverBounds.position.x + gameOverBounds.size.x / 2.0f,
+        gameOverBounds.position.y + gameOverBounds.size.y / 2.0f
+    });
+    gameOverText.setPosition({windowWidth / 2.0f, windowHeight / 2.0f - 60.0f});
+
+
+    sf::Text restartText(debugFont);
+    restartText.setCharacterSize(28);
+    restartText.setFillColor(sf::Color::White);
+    restartText.setString("Press R to restart  |  Esc to quit");
+
+    sf::FloatRect restartBounds = restartText.getLocalBounds();
+    restartText.setOrigin({
+        restartBounds.position.x + restartBounds.size.x / 2.0f,
+        restartBounds.position.y + restartBounds.size.y / 2.0f
+    });
+    restartText.setPosition({windowWidth / 2.0f, windowHeight / 2.0f + 20.0f});
+
     int lastSpawnedLaserId = 0;
 
     sf::Clock clock;
 
+    auto restartGame = [&]()
+    {
+        playerHealth = maxHealth;
+        damageCooldown = 0.0f;
+        gameOver = false;
+
+        player.setPosition({windowWidth / 2.0f, windowHeight / 2.0f});
+        player.setFillColor(sf::Color::Red);
+
+        lasers.clear();
+
+        for (auto& event : laserEvents)
+        {
+            event.spawned = event.activeBeat < debugStartBeat;
+        }
+
+        songTime = debugStartTime;
+        lastBeatIndex = -1;
+        beatPulse = 0.0f;
+        lastSpawnedLaserId = 0;
+
+        music.stop();
+        music.setPlayingOffset(sf::seconds(debugStartTime));
+        music.play();
+
+        clock.restart();
+    };
+
     while (window.isOpen())
     {
         float deltaTime = clock.restart().asSeconds();
-        songTime += deltaTime;
+        songTime = music.getPlayingOffset().asSeconds();
 
         int currentBeatIndex = static_cast<int>(std::floor(songTime / beatInterval));
 
@@ -210,7 +308,8 @@ int main()
             "Beat: " + std::to_string(static_cast<int>(currentBeatFloat)) +
             "\nLast Laser: " + std::to_string(lastSpawnedLaserId) +
             "\nActive Lasers: " + std::to_string(lasers.size()) +
-            "\nTotal Lasers: " + std::to_string(laserEvents.size())
+            "\nTotal Lasers: " + std::to_string(laserEvents.size()) +
+            "\nHealth: " + std::to_string(playerHealth)
         );
 
         for (auto &event : laserEvents)
@@ -254,6 +353,31 @@ int main()
             {
                 window.close();
             }
+
+            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+            {
+                if (keyPressed->code == sf::Keyboard::Key::Escape)
+                {
+                    window.close();
+                }
+
+                if (gameOver && keyPressed->code == sf::Keyboard::Key::R)
+                {
+                    restartGame();
+                }
+            }
+        }
+
+        if (gameOver)
+        {
+            window.clear(sf::Color(20, 0, 0));
+
+            window.draw(gameOverText);
+            window.draw(restartText);
+
+            window.display();
+
+            continue;
         }
 
         // Player movement
@@ -314,6 +438,50 @@ int main()
                     return laser.age > laser.warningTime + laser.activeTime;
                 }),
             lasers.end());
+
+        // Damage cooldown timer
+        if (damageCooldown > 0.0f)
+        {
+            damageCooldown -= deltaTime;
+        }
+
+        // Check active laser collision
+        bool playerTouchingLaser = false;
+
+        for (const auto& laser : lasers)
+        {
+            if (circleIntersectsLaser(player, playerRadius, laser))
+            {
+                playerTouchingLaser = true;
+                break;
+            }
+        }
+
+        if (playerTouchingLaser && damageCooldown <= 0.0f)
+        {
+            playerHealth--;
+            damageCooldown = damageCooldownDuration;
+
+            std::cout << "Player hit! Health: " << playerHealth << std::endl;
+
+            if (playerHealth <= 0)
+            {
+                std::cout << "Game Over!" << std::endl;
+
+                gameOver = true;
+                music.pause();
+            }
+        }
+
+        // Visual hit feedback
+        if (damageCooldown > 0.0f)
+        {
+            player.setFillColor(sf::Color::White);
+        }
+        else
+        {
+            player.setFillColor(sf::Color::Red);
+        }
 
         // Decay strobe pulse
         beatPulse -= deltaTime * 3.5f;

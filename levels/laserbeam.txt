@@ -161,22 +161,293 @@ LASER 150 640 560 0
 LASER 151 640 360 35
 LASER 151 640 360 -35
 
-# Beat 152 - offset cross
-LASER 152 520 360 90
-LASER 152 640 420 0
+# --- Double-time single lasers: beats 152-156 ---
+# One laser every 0.5 beat
 
-# Beat 153 - left-side pressure
-LASER 153 360 360 90
-LASER 153 640 260 0
+LASER 152 640 360 0
+LASER 152.5 640 360 90
 
-# Beat 154 - right-side pressure
-LASER 154 920 360 90
-LASER 154 640 460 0
+LASER 153 420 360 35
+LASER 153.5 860 360 -35
 
-# Beat 155 - diagonal tunnel
-LASER 155 420 360 35
-LASER 155 860 360 -35
+LASER 154 640 220 0
+LASER 154.5 640 500 0
 
-# Beat 156 - final double center hit
-LASER 156 640 360 0
-LASER 156 640 360 90
+LASER 155 360 360 90
+LASER 155.5 920 360 90
+
+LASER 156 640 360 35
+
+# --- HARD DROP: 4 lasers each scene ---
+
+# Beat 160 - full center impact BOOM LASER
+LASER 160 640 360 0
+LASER 160 640 360 90
+LASER 160 640 360 35
+LASER 160 640 360 -35
+
+# Beat 162 - left/right vertical squeeze + diagonals BOOM LASER
+LASER 162 360 360 90
+LASER 162 920 360 90
+LASER 162 640 360 35
+LASER 162 640 360 -35
+
+# Beat 164 - top/bottom horizontal squeeze + diagonals BOOM LASER
+LASER 164 640 220 0
+LASER 164 640 500 0
+LASER 164 640 360 35
+LASER 164 640 360 -35
+
+# Beat 166 - offset chaos hit BOOM LASER
+LASER 166 420 360 90
+LASER 166 860 360 90
+LASER 166 640 260 0
+LASER 166 640 460 0
+
+# --- Double-time single lasers: beats 170-180 ---
+# One laser every 0.5 beat
+
+LASER 168 640 360 0
+LASER 168.5 640 360 90
+LASER 169 420 360 35
+LASER 169.5 860 360 -35
+
+LASER 170 640 360 0
+LASER 170.5 640 360 90
+LASER 171 420 360 35
+LASER 171.5 860 360 -35
+
+LASER 172 640 220 0
+LASER 172.5 640 500 0
+LASER 173 360 360 90
+LASER 173.5 920 360 90
+
+LASER 174 640 360 35
+LASER 174.5 640 360 -35
+
+# --- Impact lasers: beats 176 and 177 ---
+LASER 176 640 360 0
+LASER 176 640 360 90
+LASER 176 640 360 35
+LASER 176 640 360 -35
+LASER 177 420 360 90
+LASER 177 860 360 90
+LASER 177 640 240 0
+LASER 177 640 480 0
+
+# --- Double-time single-laser patterns: beats 178-184 ---
+# One laser every 0.5 beat
+
+LASER 178 640 360 0
+LASER 178.5 640 360 90
+
+LASER 179 420 360 35
+LASER 179.5 860 360 -35
+
+LASER 180 640 220 0
+LASER 180.5 640 500 0
+
+LASER 181 360 360 90
+LASER 181.5 920 360 90
+
+LASER 182 640 360 35
+LASER 182.5 640 360 -35
+
+LASER 183 500 360 90
+LASER 183.5 780 360 90
+
+LASER 184 640 360 0
+
+# --- Standard BPM double-laser patterns: beats 185-198 ---
+# Two lasers per beat
+
+# Beat 185 - vertical side lanes
+LASER 185 360 360 90
+LASER 185 920 360 90
+
+# Beat 186 - horizontal top/bottom lanes
+LASER 186 640 220 0
+LASER 186 640 500 0
+
+# Beat 187 - diagonal slash pair
+LASER 187 420 360 35
+LASER 187 860 360 35
+
+# Beat 188 - diagonal backslash pair
+LASER 188 420 360 -35
+LASER 188 860 360 -35
+
+# Beat 189 - tighter vertical squeeze
+LASER 189 460 360 90
+LASER 189 820 360 90
+
+# Beat 190 - tighter horizontal squeeze
+LASER 190 640 280 0
+LASER 190 640 440 0
+
+# Beat 191 - crossing center diagonals
+LASER 191 640 360 35
+LASER 191 640 360 -35
+
+# Beat 192 - center cross
+LASER 192 640 360 0
+LASER 192 640 360 90
+
+# Beat 193 - left pressure
+LASER 193 360 360 90
+LASER 193 640 260 0
+
+# Beat 194 - right pressure
+LASER 194 920 360 90
+LASER 194 640 460 0
+
+# Beat 195 - diagonal tunnel
+LASER 195 420 360 35
+LASER 195 860 360 -35
+
+# Beat 196 - reverse diagonal tunnel
+LASER 196 420 360 -35
+LASER 196 860 360 35
+
+# Beat 197 - outer verticals
+LASER 197 300 360 90
+LASER 197 980 360 90
+
+# Beat 198 - final center impact
+LASER 198 640 360 0
+LASER 198 640 360 90
+
+# --- Beat 200: 8-laser impact pattern ---
+# Big full-screen drop impact
+
+LASER 200 640 360 0
+LASER 200 640 360 90
+LASER 200 640 360 35
+LASER 200 640 360 -35
+LASER 200 360 360 90
+LASER 200 920 360 90
+LASER 200 640 220 0
+LASER 200 640 500 0
+
+
+# --- Double-time single lasers: beats 202-208 ---
+# One laser every 0.5 beat
+
+LASER 202 640 360 0
+LASER 202.5 640 360 90
+
+LASER 203 420 360 35
+LASER 203.5 860 360 -35
+
+LASER 204 640 220 0
+LASER 204.5 640 500 0
+
+LASER 205 360 360 90
+LASER 205.5 920 360 90
+
+LASER 206 640 360 35
+LASER 206.5 640 360 -35
+
+LASER 207 500 360 90
+LASER 207.5 780 360 90
+
+# --- Standard 4-laser impacts: beats 208-209 ---
+
+# Beat 208 - center impact
+LASER 208 640 360 0
+LASER 208 640 360 90
+LASER 208 640 360 35
+LASER 208 640 360 -35
+
+# Beat 209 - offset box impact
+LASER 209 420 360 90
+LASER 209 860 360 90
+LASER 209 640 240 0
+LASER 209 640 480 0
+
+# --- Double-time single lasers: beats 210-216 ---
+# One laser every 0.5 beat
+
+LASER 210 640 360 0
+LASER 210.5 640 360 90
+
+LASER 211 420 360 35
+LASER 211.5 860 360 -35
+
+LASER 212 640 220 0
+LASER 212.5 640 500 0
+
+LASER 213 360 360 90
+LASER 213.5 920 360 90
+
+LASER 214 640 360 35
+LASER 214.5 640 360 -35
+
+LASER 215 500 360 90
+LASER 215.5 780 360 90
+
+LASER 216 640 360 0
+
+# --- Standard BPM double lasers: beats 218-230 ---
+# Two lasers per beat
+
+# Beat 218 - vertical side lanes
+LASER 218 360 360 90
+LASER 218 920 360 90
+
+# Beat 219 - horizontal top/bottom lanes
+LASER 219 640 220 0
+LASER 219 640 500 0
+
+# Beat 220 - diagonal tunnel
+LASER 220 420 360 35
+LASER 220 860 360 -35
+
+# Beat 221 - reverse diagonal tunnel
+LASER 221 420 360 -35
+LASER 221 860 360 35
+
+# Beat 222 - center cross
+LASER 222 640 360 0
+LASER 222 640 360 90
+
+# Beat 223 - tight vertical squeeze
+LASER 223 460 360 90
+LASER 223 820 360 90
+
+# Beat 224 - tight horizontal squeeze
+LASER 224 640 280 0
+LASER 224 640 440 0
+
+# Beat 225 - offset diagonal slash
+LASER 225 500 320 35
+LASER 225 780 400 35
+
+# Beat 226 - offset diagonal backslash
+LASER 226 500 400 -35
+LASER 226 780 320 -35
+
+# Beat 227 - left pressure
+LASER 227 360 360 90
+LASER 227 640 260 0
+
+# Beat 228 - right pressure
+LASER 228 920 360 90
+LASER 228 640 460 0
+
+# Beat 229 - outer verticals
+LASER 229 300 360 90
+LASER 229 980 360 90
+
+# Beat 230 - final center hit
+LASER 230 640 360 35
+LASER 230 640 360 -35
+
+# Beat 231 - top/bottom pressure
+LASER 231 640 180 0
+LASER 231 640 540 0
+
+# Beat 232 - final vertical squeeze
+LASER 232 420 360 90
+LASER 232 860 360 90
+
