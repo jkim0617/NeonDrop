@@ -10,6 +10,8 @@
 
 struct Laser
 {
+    int id = 0;
+
     sf::RectangleShape shape;
     float age = 0.0f;
     float warningTime = 0.4f;
@@ -22,6 +24,8 @@ struct Laser
 
 struct LaserEvent
 {
+    int id = 0;
+    
     float activeBeat = 0.0f;
 
     float x = 0.0f;
@@ -59,6 +63,8 @@ LevelData loadLevel(const std::string &filename)
 
     std::string line;
 
+    int laserIdCounter = 1;
+
     while (std::getline(file, line))
     {
         if (line.empty() || line[0] == '#')
@@ -82,6 +88,8 @@ LevelData loadLevel(const std::string &filename)
             int b = 255;
 
             iss >> event.activeBeat >> event.x >> event.y >> event.angle;
+
+            event.id = laserIdCounter++;
 
             level.laserEvents.push_back(event);
         }
@@ -156,14 +164,29 @@ int main()
     // MUSIC ADDED FIX ME
     sf::Music music;
 
-    if (!music.openFromFile("assets/music/Ray Volpe - Laserbeam.ogg"))
+    if (!music.openFromFile("assets/music/Ray Volpe - Laserbeam.mp3"))
     {
         std::cerr << "Failed to load music file." << std::endl;
     }
 
-    music.setVolume(70.0f);  // 0 to 100
+    music.setVolume(10.0f);  // 0 to 100
     music.setLooping(false); // true if you want it to repeat
     music.play();
+
+    sf::Font debugFont;
+
+    if (!debugFont.openFromFile("assets/fonts/debug.ttf"))
+    {
+        std::cerr << "Failed to load debug font." << std::endl;
+        return 1;
+    }
+
+    sf::Text debugText(debugFont);
+    debugText.setCharacterSize(22);
+    debugText.setFillColor(sf::Color::White);
+    debugText.setPosition({20.0f, 20.0f});
+
+    int lastSpawnedLaserId = 0;
 
     sf::Clock clock;
 
@@ -183,6 +206,13 @@ int main()
 
         float currentBeatFloat = songTime / beatInterval;
 
+        debugText.setString(
+            "Beat: " + std::to_string(static_cast<int>(currentBeatFloat)) +
+            "\nLast Laser: " + std::to_string(lastSpawnedLaserId) +
+            "\nActive Lasers: " + std::to_string(lasers.size()) +
+            "\nTotal Lasers: " + std::to_string(laserEvents.size())
+        );
+
         for (auto &event : laserEvents)
         {
             float spawnBeat = event.activeBeat - event.warningBeats;
@@ -192,6 +222,9 @@ int main()
                 event.spawned = true;
 
                 Laser laser;
+
+                laser.id = event.id;
+                lastSpawnedLaserId = event.id;
 
                 laser.warningTime = event.warningBeats * beatInterval;
                 laser.activeTime = event.activeBeats * beatInterval;
@@ -313,6 +346,8 @@ int main()
         }
 
         window.draw(player);
+
+        window.draw(debugText);
 
         window.display();
     }
