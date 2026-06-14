@@ -25,7 +25,7 @@ struct Laser
 struct LaserEvent
 {
     int id = 0;
-    
+
     float activeBeat = 0.0f;
 
     float x = 0.0f;
@@ -43,13 +43,15 @@ struct LaserEvent
     bool spawned = false;
 };
 
+// test
+
 struct LevelData
 {
     float bpm = 150.0f;
     std::vector<LaserEvent> laserEvents;
 };
 
-bool circleIntersectsLaser(const sf::CircleShape& player, float radius, const Laser& laser)
+bool circleIntersectsLaser(const sf::CircleShape &player, float radius, const Laser &laser)
 {
     if (!laser.active)
         return false;
@@ -138,7 +140,7 @@ int main()
     player.setOrigin({playerRadius, playerRadius});
     player.setPosition({windowWidth / 2.0f, windowHeight / 2.0f});
     player.setFillColor(sf::Color::Red);
-    
+
     const int maxHealth = 20;
     int playerHealth = maxHealth;
 
@@ -160,7 +162,7 @@ int main()
     std::vector<LaserEvent> laserEvents = level.laserEvents;
     std::vector<Laser> lasers;
 
-    for (auto& event : laserEvents)
+    for (auto &event : laserEvents)
     {
         if (event.activeBeat < debugStartBeat)
         {
@@ -214,7 +216,7 @@ int main()
     music.setVolume(10.0f);  // 0 to 100
     music.setLooping(false); // true if you want it to repeat
 
-    music.setPlayingOffset(sf::seconds(debugStartTime));   
+    music.setPlayingOffset(sf::seconds(debugStartTime));
 
     music.play();
 
@@ -237,12 +239,9 @@ int main()
     gameOverText.setString("GAME OVER");
 
     sf::FloatRect gameOverBounds = gameOverText.getLocalBounds();
-    gameOverText.setOrigin({
-        gameOverBounds.position.x + gameOverBounds.size.x / 2.0f,
-        gameOverBounds.position.y + gameOverBounds.size.y / 2.0f
-    });
+    gameOverText.setOrigin({gameOverBounds.position.x + gameOverBounds.size.x / 2.0f,
+                            gameOverBounds.position.y + gameOverBounds.size.y / 2.0f});
     gameOverText.setPosition({windowWidth / 2.0f, windowHeight / 2.0f - 60.0f});
-
 
     sf::Text restartText(debugFont);
     restartText.setCharacterSize(28);
@@ -250,10 +249,8 @@ int main()
     restartText.setString("Press R to restart  |  Esc to quit");
 
     sf::FloatRect restartBounds = restartText.getLocalBounds();
-    restartText.setOrigin({
-        restartBounds.position.x + restartBounds.size.x / 2.0f,
-        restartBounds.position.y + restartBounds.size.y / 2.0f
-    });
+    restartText.setOrigin({restartBounds.position.x + restartBounds.size.x / 2.0f,
+                           restartBounds.position.y + restartBounds.size.y / 2.0f});
     restartText.setPosition({windowWidth / 2.0f, windowHeight / 2.0f + 20.0f});
 
     int lastSpawnedLaserId = 0;
@@ -271,7 +268,7 @@ int main()
 
         lasers.clear();
 
-        for (auto& event : laserEvents)
+        for (auto &event : laserEvents)
         {
             event.spawned = event.activeBeat < debugStartBeat;
         }
@@ -309,8 +306,7 @@ int main()
             "\nLast Laser: " + std::to_string(lastSpawnedLaserId) +
             "\nActive Lasers: " + std::to_string(lasers.size()) +
             "\nTotal Lasers: " + std::to_string(laserEvents.size()) +
-            "\nHealth: " + std::to_string(playerHealth)
-        );
+            "\nHealth: " + std::to_string(playerHealth));
 
         for (auto &event : laserEvents)
         {
@@ -354,7 +350,7 @@ int main()
                 window.close();
             }
 
-            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+            if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>())
             {
                 if (keyPressed->code == sf::Keyboard::Key::Escape)
                 {
@@ -448,7 +444,7 @@ int main()
         // Check active laser collision
         bool playerTouchingLaser = false;
 
-        for (const auto& laser : lasers)
+        for (const auto &laser : lasers)
         {
             if (circleIntersectsLaser(player, playerRadius, laser))
             {
