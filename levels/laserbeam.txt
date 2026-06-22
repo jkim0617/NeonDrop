@@ -1,4 +1,6 @@
 BPM 150
+MUS assets/music/RayVolpeLaserbeam.mp3
+END 234
 
 # Neon Drop - Laserbeam-inspired starter level
 # Format:

@@ -47,6 +47,8 @@ struct LevelData
 {
     float bpm = 150.0f;
     std::vector<LaserEvent> laserEvents;
+    std::string musFile;
+    int endBeat;
 };
 
 bool circleIntersectsLaser(const sf::CircleShape& player, float radius, const Laser& laser)
@@ -99,6 +101,14 @@ LevelData loadLevel(const std::string &filename)
         if (command == "BPM")
         {
             iss >> level.bpm;
+        }
+        else if (command == "MUS")
+        {
+            iss >> level.musFile;
+        }
+        else if (command == "END")
+        {
+            iss >> level.endBeat;
         }
         else if (command == "LASER")
         {
@@ -206,7 +216,8 @@ int main()
     // MUSIC ADDED FIX ME
     sf::Music music;
 
-    if (!music.openFromFile("assets/music/Ray Volpe - Laserbeam.mp3"))
+    // if (!music.openFromFile("assets/music/RayVolpeLaserbeam.mp3"))
+    if (!music.openFromFile(level.musFile))
     {
         std::cerr << "Failed to load music file." << std::endl;
     }
@@ -471,6 +482,12 @@ int main()
                 gameOver = true;
                 music.pause();
             }
+        }
+
+        if (lastBeatIndex == level.endBeat - 1)
+        {
+            gameOver = true;
+            music.pause();
         }
 
         // Visual hit feedback
